@@ -1,34 +1,121 @@
-<html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>User List</title>
+</head>
 <body>
-<div>
+<div class="container">
+
+
+    <h2 class="users-header">Users</h2>
+
+    <form method="post" action="delete">
+        <input style="display: none" type="text" name="filter">d
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        <button class="btn btn-outline-secondary" type="submit">Delete</button>
+    </form>
+    <form method="post" action="blockUnblock">
+        <input style="display: none" type="text" name="filter">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        <button class="btn btn-outline-secondary" type="submit">Block</button>
+    </form>
+    <form method="post" action="unblock">
+        <input style="display: none" type="text" name="filter">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        <button class="btn btn-outline-secondary" type="submit">Unblock</button>
+    </form>
+
     <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <input type="submit" value="Sign Out">
+        <input type="submit" value="Sign Out" class="btn btn-outline-secondary">
     </form>
-</div>
 
-<div>
-    <form method="post">
-        <input type="text" name="text" placeholder="Input message">
-        <input type="text" name="tag" placeholder="Tag">
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <button type="submit">Add</button>
-    </form>
-    <form method="post" action="filter">
-        <input type="text" name="filter">
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <button type="submit">Find</button>
-    </form>
-</div>
-<div>List of messages:</div>
-{{#messages}}
-    <div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">User</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="selectAll" value="option1">
+                    <label class="form-check-label" for="inlineCheckbox1">Select all</label>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#users}}
+            <tr>
+                <th scope="row" class="username">{{username}}</th>
+                <td>{{email}}</td>
+                <td>{{active}}</td>
+                <td>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input alone" id="select1" onclick="checkCheckboxes()">
+                    </div>
+                </td>
+            </tr>
+        {{/users}}
+        </tbody>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script>
+        $('#confirmModal').on('show.bs.modal', function (event) {
+            let checks = document.getElementsByClassName("form-check-input alone");
+            let users = document.getElementsByClassName("username");
+            let text = document.getElementsByClassName("modal-body")[0];
+            text.textContent = "Are you sure you want to delete ";
+            for (let i = 0; i < checks.length; i++) {
+                if (checks[i].checked) {
+                    text.textContent += users[i].textContent + " ";
+                }
+            }
+            text.textContent += "?";
+        });
+        $('#selectAll').on('change', function () {
+            let checks = document.getElementsByClassName("form-check-input alone");
+            for (let i = 0; i < checks.length; i++) {
+                checks[i].checked = $(this).is(':checked');
+            }
+            selectUsers();
+        });
 
-        <b>{{id}}</b>
-        <span>{{text}}</span>
-        <i>{{tag}}</i>
-        <strong>{{authorName}}</strong>
-    </div>
-{{/messages}}
+        function checkCheckboxes() {
+            if (Array.from(document.getElementsByClassName("form-check-input alone")).some(function (check) {
+                return !check.checked;
+            })) {
+                document.getElementById("selectAll").checked = false;
+            } else {
+                document.getElementById("selectAll").checked = true;
+            }
+            selectUsers();
+        }
+
+        function selectUsers() {
+            let usersList = "";
+            let users = document.getElementsByClassName("username");
+            Array.from(document.getElementsByClassName("form-check-input alone")).forEach(function (item, i, arr) {
+                if (item.checked)
+                    usersList += users[i].textContent + " ";
+            });
+            Array.from(document.getElementsByName("filter")).forEach(function (item, i, arr) {
+                arr[i].value = usersList;
+            });
+        }
+    </script>
+</div>
 </body>
 </html>

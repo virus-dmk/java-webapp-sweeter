@@ -16,11 +16,24 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private boolean active;
+    private String email;
+
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+    public String getEmail() {
+        if (this.email == null) {
+            this.email = "<not set>";
+        }
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Long getId() {
         return id;
