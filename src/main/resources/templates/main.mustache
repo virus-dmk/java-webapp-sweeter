@@ -11,58 +11,56 @@
 <div class="container">
 
 
-    <h2 class="users-header">Users</h2>
+    <h1 inline="text">Hello, {{currentUser}}</h1>
+    <!--<form action="/logout" method="post">-->
+        <!--<input class="btn btn-outline-secondary" type="submit" name="mainButton" value="Sign Out">-->
+    <!--</form>-->
 
-    <form method="post" action="delete">
-        <input style="display: none" type="text" name="filter">d
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <button class="btn btn-outline-secondary" type="submit">Delete</button>
-    </form>
-    <form method="post" action="blockUnblock">
-        <input style="display: none" type="text" name="filter">
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <button class="btn btn-outline-secondary" type="submit">Block</button>
-    </form>
-    <form method="post" action="unblock">
-        <input style="display: none" type="text" name="filter">
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <button class="btn btn-outline-secondary" type="submit">Unblock</button>
-    </form>
+    <form method="get" action="/users">
 
-    <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <input type="submit" value="Sign Out" class="btn btn-outline-secondary">
-    </form>
+        <input class="btn btn-outline-secondary" type="submit" name="mainButton" value="Sign Out">
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">User</th>
-            <th scope="col">Email</th>
-            <th scope="col">Status</th>
-            <th scope="col">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="selectAll" value="option1">
-                    <label class="form-check-label" for="inlineCheckbox1">Select all</label>
-                </div>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#users}}
+        <button class="btn btn-outline-secondary inline-block" type="submit" name="mainButton" value="active/block">
+            Active / Block
+        </button>
+        <button class="btn btn-outline-secondary inline-block" type="submit" name="mainButton" value="delete">Delete
+        </button>
+
+
+        <table class="table">
+            <thead>
             <tr>
-                <th scope="row" class="username">{{username}}</th>
-                <td>{{email}}</td>
-                <td>{{active}}</td>
-                <td>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input alone" id="select1" onclick="checkCheckboxes()">
+                <th scope="col">User</th>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="selectAll">Select all</label>
+                        <input class="form-check-input" type="checkbox" id="selectAll" value="option1">
                     </div>
-                </td>
+                </th>
             </tr>
-        {{/users}}
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+            {{#users}}
+                <tr>
+                    <th scope="row" class="username">{{username}}</th>
+                    <td>{{email}}</td>
+                    <td>{{active}}</td>
+                    <td>
+                        <div class="form-check">
+                            <!--<input type="checkbox" class="form-check-input alone" id="select1" onclick="checkCheckboxes()">-->
+                            <input class="big-checkbox" type="checkbox" name="id" value="{{id}}"/>
+                        </div>
+                    </td>
+                </tr>
+            {{/users}}
+            </tbody>
+        </table>
+
+    </form>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
@@ -72,50 +70,52 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
-    <script>
-        $('#confirmModal').on('show.bs.modal', function (event) {
-            let checks = document.getElementsByClassName("form-check-input alone");
-            let users = document.getElementsByClassName("username");
-            let text = document.getElementsByClassName("modal-body")[0];
-            text.textContent = "Are you sure you want to delete ";
-            for (let i = 0; i < checks.length; i++) {
-                if (checks[i].checked) {
-                    text.textContent += users[i].textContent + " ";
-                }
-            }
-            text.textContent += "?";
-        });
-        $('#selectAll').on('change', function () {
-            let checks = document.getElementsByClassName("form-check-input alone");
-            for (let i = 0; i < checks.length; i++) {
-                checks[i].checked = $(this).is(':checked');
-            }
-            selectUsers();
-        });
-
-        function checkCheckboxes() {
-            if (Array.from(document.getElementsByClassName("form-check-input alone")).some(function (check) {
-                return !check.checked;
-            })) {
-                document.getElementById("selectAll").checked = false;
-            } else {
-                document.getElementById("selectAll").checked = true;
-            }
-            selectUsers();
-        }
-
-        function selectUsers() {
-            let usersList = "";
-            let users = document.getElementsByClassName("username");
-            Array.from(document.getElementsByClassName("form-check-input alone")).forEach(function (item, i, arr) {
-                if (item.checked)
-                    usersList += users[i].textContent + " ";
-            });
-            Array.from(document.getElementsByName("filter")).forEach(function (item, i, arr) {
-                arr[i].value = usersList;
-            });
-        }
-    </script>
 </div>
+
+<script>
+    // $('#confirmModal').on('show.bs.modal', function (event) {
+    //     let checks = document.getElementsByClassName("form-check-input alone");
+    //     let users = document.getElementsByClassName("username");
+    //     let text = document.getElementsByClassName("modal-body")[0];
+    //     text.textContent = "Are you sure you want to delete ";
+    //     for (let i = 0; i < checks.length; i++) {
+    //         if (checks[i].checked) {
+    //             text.textContent += users[i].textContent + " ";
+    //         }
+    //     }
+    //     text.textContent += "?";
+    // });
+    $('#selectAll').on('change', function () {
+        let checks = document.getElementsByClassName("big-checkbox");
+        for (let i = 0; i < checks.length; i++) {
+            checks[i].checked = $(this).is(':checked');
+        }
+        // selectUsers();
+    });
+
+    <!--function checkCheckboxes() {-->
+    <!--if (Array.from(document.getElementsByClassName("form-check-input alone")).some(function (check) {-->
+    <!--return !check.checked;-->
+    <!--})) {-->
+    <!--document.getElementById("selectAll").checked = false;-->
+    <!--} else {-->
+    <!--document.getElementById("selectAll").checked = true;-->
+    <!--}-->
+    <!--selectUsers();-->
+    <!--}-->
+
+    <!--function selectUsers() {-->
+    <!--let usersList = "";-->
+    <!--let users = document.getElementsByClassName("username");-->
+    <!--Array.from(document.getElementsByClassName("form-check-input alone")).forEach(function (item, i, arr) {-->
+    <!--if (item.checked)-->
+    <!--usersList += users[i].textContent + " ";-->
+    <!--});-->
+    <!--Array.from(document.getElementsByName("filter")).forEach(function (item, i, arr) {-->
+    <!--arr[i].value = usersList;-->
+    <!--});-->
+    <!--}-->
+</script>
+
 </body>
 </html>

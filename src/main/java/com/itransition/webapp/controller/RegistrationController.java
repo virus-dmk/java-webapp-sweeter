@@ -23,12 +23,20 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
-        User userFromDb = userRepo.findByUsername(user.getUsername());
+//        User userFromDb = userRepo.findByUsername(user.getUsername());
 
-        if (userFromDb != null) {
-            model.put("message", "User exists!");
+        User userName = userRepo.findByUsername(user.getUsername());
+        User userEmail = userRepo.findByEmail(user.getEmail());
+        if(userName != null || userEmail != null){
+            model.put("message", "Username or Email already exists!");
             return "registration";
         }
+
+
+//        if (userFromDb != null) {
+//            model.put("message", "User exists!");
+//            return "registration";
+//        }
 
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));

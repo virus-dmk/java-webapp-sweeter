@@ -9,46 +9,26 @@
 </head>
 <body>
 
-<script>
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : '{your-app-id}',
-            cookie     : true,
-            xfbml      : true,
-            version    : '{api-version}'
-        });
-
-        FB.AppEvents.logPageView();
-
-    };
-
-    (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
 <div class="container">
     <div class="container">
         <h1>Login page</h1>
         <form action="/login" method="post">
-            <input type="text" name="username" placeholder="Username"/>
-            <input type="password" name="password" placeholder="Password"/>
+            <input type="text" name="username" placeholder="Username" required/>
+            <input type="password" name="password" placeholder="Password" required/>
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
             <input type="submit" value="Sign In"/>
         </form>
     </div>
+    <!--<span>{{message}}</span>-->
     <div class="social">
         <a class="circle github" href="#">
-            <i class="fa fa-github fa-fw"></i>
+            <i class="fa fa-github fa-fw">git</i>
         </a>
         <a id="google_login" class="circle google" href="#">
-            <i class="fa fa-google-plus fa-fw"></i>
+            <i class="fa fa-google-plus fa-fw">google</i>
         </a>
         <a id="facebook_login" class="circle facebook" href="#">
-            <i class="fa fa-facebook fa-fw"></i>
+            <i class="fa fa-facebook fa-fw">facebook</i>
         </a>
     </div>
     <a href="/registration">Add new user</a>
