@@ -8,11 +8,12 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table(name = "usr")
+@Table(name = "usr" )
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+//    @Column(columnDefinition = )
     private String username;
     private String password;
     private boolean active;
@@ -38,7 +39,6 @@ public class User implements UserDetails {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }

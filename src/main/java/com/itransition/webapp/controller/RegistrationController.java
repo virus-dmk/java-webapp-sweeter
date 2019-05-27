@@ -3,7 +3,10 @@ package com.itransition.webapp.controller;
 import com.itransition.webapp.domain.Role;
 import com.itransition.webapp.domain.User;
 import com.itransition.webapp.repos.UserRepo;
+import com.itransition.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,36 +16,32 @@ import java.util.Map;
 
 @Controller
 public class RegistrationController {
+
+    private final UserService userService;
+
+    private final UserRepo userRepo;
+
     @Autowired
-    private UserRepo userRepo;
+    public RegistrationController(UserService userService, UserRepo userRepo) {
+        this.userService = userService;
+        this.userRepo = userRepo;
+    }
 
     @GetMapping("/registration")
-    public String reistration() {
+    public String registration() {
         return "registration";
     }
 
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
-//        User userFromDb = userRepo.findByUsername(user.getUsername());
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
 
-        User userName = userRepo.findByUsername(user.getUsername());
-        User userEmail = userRepo.findByEmail(user.getEmail());
-        if(userName != null || userEmail != null){
+
+        if(!userService.createUser(user)){
             model.put("message", "Username or Email already exists!");
-            return "registration";
+            return "redirect:/registration";
         }
-
-
-//        if (userFromDb != null) {
-//            model.put("message", "User exists!");
-//            return "registration";
-//        }
-
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        userRepo.save(user);
-
-
+        System.out.println("user "+ loggedInUser.getName()+ "logged in");
         return "redirect:/login";
     }
 }
