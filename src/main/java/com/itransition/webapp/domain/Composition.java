@@ -10,7 +10,6 @@ public class Composition {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-//    private Long user_id; //DELETE??!!!
     private String compos_name;
     private String description;
     private Date creation_date;

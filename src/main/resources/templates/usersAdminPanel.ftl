@@ -55,11 +55,7 @@
                             <div class="d-flex justify-content-around">Status</div>
                         </th>
                         <th scope="col">
-                            <div class="d-flex justify-content-around">
-                                <form action="" >
-                                    <button type="submit">Edit</button>
-                                </form>
-                            </div>
+                            <div class="d-flex justify-content-around">Edit</div>
                         </th>
                         <th scope="col">
                             <div class="d-flex justify-content-around">
@@ -77,19 +73,32 @@
                     <#list usrs as  user>
                         <tr>
                             <td>
-                                <div class="d-flex justify-content-around"><h4><span
-                                                class="badge badge-outline-primary">${user.username}</span>
+                                <div class="d-flex justify-content-around"><h4>
+                                        <span class="badge badge-outline-primary">${user.username}</span>
                                     </h4></div>
                             </td>
                             <td>
-                                <div class="d-flex justify-content-around"><h4><span
-                                                class="badge badge-outline-primary">${user.email}</span>
+                                <div class="d-flex justify-content-around"><h4>
+                                        <span class="badge badge-outline-primary">${user.email}</span>
                                     </h4></div>
                             </td>
                             <td>
-                                <div class="d-flex justify-content-around"><h5><span
-                                                class="badge badge-secondary">${user.active}</span>
+                                <div class="d-flex justify-content-around"><h5>
+                                        <span class="badge badge-secondary">${user.active}</span>
                                     </h5></div>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-around">
+                                    <span class="badge badge-secondary">
+                                        <#list user.roles as role>${role}<#sep>,</#list>
+                                    </span>
+                                </div>
+
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-around">
+                                    <a href="/user/${user.id}">Edit</a>
+                                </div>
                             </td>
 
                             <!--<input type="checkbox" class="form-check-input alone" id="select1" onclick="checkCheckboxes()">-->
