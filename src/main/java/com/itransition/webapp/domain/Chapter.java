@@ -17,14 +17,17 @@ public class Chapter {
 
     private String chapter_name;
     private Integer chapter_number;
+    @Column(columnDefinition = "LONGTEXT")
+    private String chapter_text;
 
     public Chapter(){
     }
 
-    public Chapter(String chapter_name, Integer chapter_number, String chapter_text) {
+    public Chapter(String chapter_name, Integer chapter_number, String chapter_text, Composition composition) {
         this.chapter_name = chapter_name;
         this.chapter_number = chapter_number;
         this.chapter_text = chapter_text;
+        this.composition = composition;
     }
 
     public Long getId() {
@@ -59,5 +62,5 @@ public class Chapter {
         this.chapter_text = chapter_text;
     }
 
-    private String chapter_text;
+
 }

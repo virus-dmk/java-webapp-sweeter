@@ -37,7 +37,7 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <#--<input type="hidden" name="_csrf" value="${_csrf.token}"/>-->
                 <button type="submit" class="btn btn-primary">Register</button>
                 <a class="btn btn-info" href="/login">Login</a>
             </div>

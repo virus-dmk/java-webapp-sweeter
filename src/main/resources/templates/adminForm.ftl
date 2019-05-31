@@ -1,6 +1,7 @@
 <#import "parts/common.ftl" as common>
 
 
+
 <@common.html_skileton>
 
 
@@ -26,18 +27,18 @@
                 }
 
                 input.big-checkbox {
-                    width: 30px;
-                    height: 30px;
+                    width: 20px;
+                    height: 20px;
                 }
             </style>
-            <form method="get" action="">
-                <input class="btn btn-outline-secondary" type="submit" name="mainButton" value="Sign Out">
+            <form method="post" action="adminFormButtons">
+                <#--<input class="btn btn-outline-secondary" type="submit" name="mainButton" value="Sign Out">-->
 
-                <button class="btn btn-outline-secondary inline-block" type="submit" name="mainButton"
+                <button class="btn btn-outline-secondary inline-block" type="submit" name="activeBlockbtn"
                         value="active/block">
                     Active / Block
                 </button>
-                <button class="btn btn-outline-secondary inline-block" type="submit" name="mainButton" value="delete">
+                <button class="btn btn-outline-secondary inline-block" type="submit" name="deleteBtn" value="delete">
                     Delete
                 </button>
 
@@ -53,6 +54,9 @@
                         </th>
                         <th scope="col">
                             <div class="d-flex justify-content-around">Status</div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex justify-content-around">Role</div>
                         </th>
                         <th scope="col">
                             <div class="d-flex justify-content-around">Edit</div>
@@ -84,13 +88,13 @@
                             </td>
                             <td>
                                 <div class="d-flex justify-content-around"><h5>
-                                        <span class="badge badge-secondary">${user.active}</span>
+                                        <span class="badge badge-secondary">${user.active?string}</span>
                                     </h5></div>
                             </td>
                             <td>
                                 <div class="d-flex justify-content-around">
                                     <span class="badge badge-secondary">
-                                        <#list user.roles as role>${role}<#sep>,</#list>
+                                        <#list user.roles as role>${role}<#sep>, </#list>
                                     </span>
                                 </div>
 
@@ -105,7 +109,7 @@
                             <!--<input class="big-checkbox" type="checkbox" name="id" value="{{id}}"/>-->
                             <th scope="row">
                                 <div class="d-flex justify-content-around"><input class="big-checkbox" type="checkbox"
-                                                                                  name="id" value="${user.id}"/></div>
+                                                                                  name="userId" value="${user.id}"/></div>
                             </th>
 
                         </tr>
@@ -117,17 +121,5 @@
         </div>
     </div>
 
-    <script>
-
-        $('#selectAll').on('change', function () {
-            let checks = document.getElementsByClassName("big-checkbox");
-            for (let i = 0; i < checks.length; i++) {
-                checks[i].checked = $(this).is(':checked');
-            }
-            // selectUsers();
-        });
-
-
-    </script>
 
 </@common.html_skileton>

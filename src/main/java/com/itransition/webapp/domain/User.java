@@ -32,6 +32,10 @@ public class User implements UserDetails {
         return email;
     }
 
+    public Boolean isAdmin(){
+        return roles.contains(Role.ADMIN);
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }

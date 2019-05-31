@@ -1,11 +1,11 @@
 package com.itransition.webapp.controller;
 
-import com.itransition.webapp.domain.Composition;
-import com.itransition.webapp.domain.Role;
-import com.itransition.webapp.domain.User;
+import com.itransition.webapp.domain.*;
 import com.itransition.webapp.repos.CompositionRepo;
 import com.itransition.webapp.repos.UserRepo;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,29 +31,20 @@ public class UserController {
 
     //    @PreAuthorize()
     @GetMapping
-    private String userPage(@AuthenticationPrincipal User authUser, Model model) {
-        model.addAttribute("user", authUser);
-//        model.addAttribute("authUser", authUser.getUsername());
-        model.addAttribute("compositions", compositionRepo.findAllByUserId(authUser.getId()));
+    private String userPage(@AuthenticationPrincipal User authUser, Map<String, Object> model) {
+        model.put("user", authUser);
+
+        Iterable<Composition> compositions = compositionRepo.findAllByAuthorOrderByIdDesc(authUser);
+//        if (compositions != null) {
+//            model.put("compositions", compositions);
+//        }
+        model.put("compositions", compositions);
+
         return "user";
     }
 
-    @PostMapping("/usersList")
-    public String showUsers(Map<String, Object> model, User user) {
-        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        if (!loggedInUser.isAuthenticated()) {
-
-            return "userAdminPanel";
-        }
-
-        Iterable<User> users = userRepo.findAll();
-        model.put("currentUser", loggedInUser.getName());
-        model.put("usrs", users);
-        return "usersAdminPanel";
-    }
-
     @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model ) {
+    public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         return "userEdit";
@@ -62,7 +54,7 @@ public class UserController {
     public String userSave(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user){
+            @RequestParam("userId") User user) {
 
         user.setUsername(username);
         Set<String> roles = Arrays.stream(Role.values())
@@ -80,9 +72,8 @@ public class UserController {
         userRepo.save(user);
 
 
-return "redirect:/user";
+        return "redirect:/user";
     }
-//    add filter for funfics урок добалсяем шаблонизатор
 
 
 }

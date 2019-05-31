@@ -7,7 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 public interface CompositionRepo extends CrudRepository<Composition, Long> {
 
 
-    Iterable<Composition> findAllByUserId(Long id);
-
+    Iterable<Composition> findAllByAuthorOrderByIdDesc(User user);
+    Integer countCompositionsByAuthor(User author);
+    void deleteCompositionById(Composition composition);
 
 }
