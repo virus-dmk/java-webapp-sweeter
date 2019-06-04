@@ -1,6 +1,7 @@
 package com.itransition.webapp.controller;
 
 import com.itransition.webapp.domain.*;
+import com.itransition.webapp.repos.ChapterRepo;
 import com.itransition.webapp.repos.CompositionRepo;
 import com.itransition.webapp.repos.UserRepo;
 import org.bouncycastle.math.raw.Mod;
@@ -13,10 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -29,15 +27,17 @@ public class UserController {
     @Autowired
     CompositionRepo compositionRepo;
 
+    @Autowired
+    ChapterRepo chapterRepo;
+
     //    @PreAuthorize()
     @GetMapping
     private String userPage(@AuthenticationPrincipal User authUser, Map<String, Object> model) {
         model.put("user", authUser);
 
         Iterable<Composition> compositions = compositionRepo.findAllByAuthorOrderByIdDesc(authUser);
-//        if (compositions != null) {
-//            model.put("compositions", compositions);
-//        }
+        //Integer compositionChapterCount = chapterRepo.countChaptersByComposition(co)
+
         model.put("compositions", compositions);
 
         return "user";
@@ -67,6 +67,9 @@ public class UserController {
             if (roles.contains(key)) {
                 user.getRoles().add(Role.valueOf(key));
             }
+        }
+        if(user.getRoles().isEmpty()){
+            user.setRoles(Collections.singleton(Role.USER));
         }
 
         userRepo.save(user);

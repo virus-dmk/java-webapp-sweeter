@@ -2,6 +2,8 @@ package com.itransition.webapp.domain;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,6 +22,9 @@ public class Composition {
     @CollectionTable(name = "composition_genre", joinColumns = @JoinColumn(name = "composition_id"))
     @Enumerated(EnumType.STRING)
     private Set<Genre> genres;
+
+    @OneToMany(mappedBy = "composition")
+    private List<Chapter> chapterList = new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.EAGER)

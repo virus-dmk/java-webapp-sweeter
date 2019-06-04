@@ -14,6 +14,7 @@
                 <div>Chapter name: ${chapter.chapter_name}</div>
                 <div>Chapter number: ${chapter.chapter_number}</div>
                 <a class="btn btn-info" href="/user/composition/chapter/${chapter.id}">Open</a>
+                <button class="btn btn-info" type="submit" action></button>
 
             </div>
         </#list>

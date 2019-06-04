@@ -5,7 +5,7 @@
     <@header.userHeader/>
 
     <div class="container">
-        <a href="/user/composition/${composition.id}">Back to composition</a>
+        <a href="/user/composition/${chapter.composition.id}">Back to composition</a>
         <div><b>${(chapter.chapter_name)?if_exists}</b></div>
         <div>${(chapter.chapter_number)?if_exists}</div>
         <div>${(chapter.chapter_text)?if_exists}</div>

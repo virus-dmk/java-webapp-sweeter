@@ -30,7 +30,6 @@ public class FanficController {
     @Autowired
     ChapterRepo chapterRepo;
 
-
     @GetMapping("/createFanfic")
     public String createFanfic(Model model) {
 
@@ -113,6 +112,14 @@ public class FanficController {
     ){
         compositionRepo.delete(composition);
 
-        return "/redirect:/user";
+        return "redirect:/user";
+    }
+
+    @GetMapping(value = "/composition/chapter/{chapter}")
+    public String showChapter(@PathVariable Chapter chapter,Model model){
+
+        model.addAttribute("chapter", chapter);
+
+        return "showChapterForm";
     }
 }
